@@ -9,7 +9,7 @@ public class Exercicios {
         //exercicio01();
         //exercicio02();
         //exercicio03();
-        exercicio04();
+        //exercicio04();
         //exercicio05();
         //exercicio06();
     }
