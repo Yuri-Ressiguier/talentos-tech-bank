@@ -10,7 +10,7 @@ public class Exercicios {
         //exercicio02();
         //exercicio03();
         //exercicio04();
-        //exercicio05();
+        exercicio05();
         //exercicio06();
     }
 
@@ -173,12 +173,12 @@ public class Exercicios {
 
         //Verifica e adiciona o valor 1
         System.out.println("Digite o primeiro valor: ");
-        validaInteiro(in);
+        validaDouble(in);
         double valor1 = in.nextDouble();
 
         //Verifica e adiciona o valor 2
         System.out.println("Digite o segundo valor: ");
-        validaInteiro(in);
+        validaDouble(in);
         double valor2 = in.nextDouble();
 
         switch (operacao) {
@@ -297,6 +297,14 @@ public class Exercicios {
     public static void validaInteiro(Scanner in) {
         if (!in.hasNextInt()) {
             System.out.println("ERRO! O valor informado deve ser um número inteiro");
+            in.close();
+            System.exit(1);
+        }
+    }
+
+    public static void  validaDouble(Scanner in) {
+        if (!in.hasNextDouble()) {
+            System.out.println("ERRO! O valor informado deve ser um número");
             in.close();
             System.exit(1);
         }
