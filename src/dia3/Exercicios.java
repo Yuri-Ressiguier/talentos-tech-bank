@@ -1,4 +1,4 @@
-package dia2;
+package dia3;
 
 import java.util.Locale;
 import java.util.Scanner;

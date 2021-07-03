@@ -1,4 +1,4 @@
-package dia3;
+package dia4;
 
 import java.util.Scanner;
 

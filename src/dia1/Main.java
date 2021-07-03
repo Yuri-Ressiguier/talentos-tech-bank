@@ -1,4 +1,4 @@
-package dia0;
+package dia1;
 
 public class Main {
 

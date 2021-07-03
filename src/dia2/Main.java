@@ -1,4 +1,4 @@
-package dia1;
+package dia2;
 
 public class Main {
     public static void main(String[] args) {
