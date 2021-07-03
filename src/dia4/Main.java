@@ -1,147 +1,47 @@
-package dia4;
+package dia3;
 
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        //System.out.println(Math.pow(2,3));
-        //exercicio01();
-        exercicio02_1();
-        exercicio02_2();
-        exercicio02_3();
-        exercicio2IV();
-        exercicio2V();
-        exercicio2VI();
 
-    }
+        System.out.println("WHILE");
+        int contagem = 1;
 
-    public static void exercicio01() {
-
-        Scanner in = new Scanner(System.in);
-        System.out.println("=== Potencia ===");
-        System.out.println("Digite a base: ");
-        int base = in.nextInt();
-        System.out.println("Digite o expoente: ");
-        int potencia = in.nextInt();
-        int resultado = 1;
-
-        for (int i = 1; i <= potencia; i++) {
-            resultado = resultado * base;
+        while (contagem < 11) {
+            System.out.println(contagem);
+            contagem += 1;
         }
 
-        System.out.println("O resultado é: " + resultado);
-    }
+        System.out.println("DO WHILE");
 
-    public static void exercicio02_1() {
-        for (int i = 0; i < 4; i++) {
-            System.out.println();
-            for (int j = 0; j < 10; j++) {
-                System.out.print("*");
-            }
+        contagem = 11;
+
+        do {
+            System.out.println(contagem);
+            contagem++;
+        } while (contagem < 11);
+
+        System.out.println("FOR");
+
+        for (int i = 0; i < 10; i++) {
+            System.out.println(i);
         }
-    }
-    public static void exercicio02_2() {
 
-        for (int i = 0; i < 5; i++) {
-            System.out.println();
-            for (int j = 0; j <= i; j++) {
-                System.out.print("*");
-            }
-        }
-        System.out.println();
-    }
+        System.out.println("FOR EACH");
 
-    public static void exercicio02_3() {
+        List<Integer> minhaLista = new ArrayList<>();
+        minhaLista.add(1);
+        minhaLista.add(2);
+        minhaLista.add(3);
 
-        for (int i = 0; i < 5; i++) {
-            for (int j = 4 - i; j > 0; j--){
-                System.out.print(" ");
-            }
-            for (int k = 5 - i; k <= 5; k++) {
-                System.out.print("*");
-            }
-            System.out.println();
-        }
-    }
+        minhaLista.forEach(item ->  {
+            System.out.println(item);
+        });
 
-   //Resolução Professor Anderson (4,5,6)
-
-    public static void exercicio2IV() {
-        int linhas = 5;
-
-        for (int i = 1; i <= linhas; i++) {
-
-            int espacos = linhas - i;
-
-            while (espacos > 0) {
-                System.out.print("  ");
-                espacos--;
-            }
-
-            int k = 0;
-            while (k != 2 * i - 1) {
-                System.out.print("* ");
-                k++;
-            }
-
-            System.out.print("\n");
-        }
-    }
-
-    public static void exercicio2V() {
-        int linhas = 5;
-
-        for (int i = 1; i <= linhas; i++) {
-
-            int espacos = linhas - i;
-
-            while (espacos > 0) {
-                System.out.print("  ");
-                espacos--;
-            }
-
-            int k = 0;
-            while (k != 2 * i - 1) {
-                System.out.printf("%d ", i);
-                k++;
-            }
-
-            System.out.print("\n");
-        }
-    }
-
-    public static void exercicio2VI() {
-        int linhas = 5;
-
-        for (int i = 1; i <= linhas; i++) {
-
-            int espacos = linhas - i;
-
-            while (espacos > 0) {
-                System.out.print("  ");
-                espacos--;
-            }
-
-            int k = 0;
-            int l = i;
-            boolean estaDecrementando = true;
-            while (k != 2 * i - 1) {
-
-                System.out.printf("%d ", l);
-                k++;
-                if (l > 1 && estaDecrementando) {
-                    l--;
-                } else {
-                    estaDecrementando = false;
-                    l++;
-                }
-            }
-
-            System.out.print("\n");
+        for (int i = 0; i < minhaLista.size();i++) {
+            System.out.println(minhaLista.get(i));
         }
     }
 }
-
-
-
-

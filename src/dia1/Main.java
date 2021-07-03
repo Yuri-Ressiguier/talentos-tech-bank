@@ -1,21 +1,10 @@
-package dia1;
+package dia0;
 
 public class Main {
+
     public static void main(String[] args) {
-
-        //Tipos primitivos
-        boolean verdadeiroOuFalso = true;
-        char characterSimple = 'a';
-        byte baite = 127;
-        short inteiroCurto = 32767;
-        int inteiro = 2_147_483_647;
-        long longo = 2_147_483_647;
-        float pontoFlutuante = 2.90f;
-        double pontoFlutuanteComMaiorPrecisao = 2.90;
-
-        //short idade = 18;
-        //System.out.println(idade);
-
-
+        System.out.println("Olá Mundo!");
+        System.out.println("Teste");
+        System.out.println(System.getProperty("java.version"));
     }
 }
