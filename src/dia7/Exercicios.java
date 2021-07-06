@@ -238,26 +238,31 @@ public class Exercicios {
                 letrasAdicionadas.add(letra);
             }
 
+            //Verifica se a letra selecionada faz parte da palavra
             for (int i = 0; i < palavra.length; i++) {
                 if (palavra[i].equals(letra)) {
-                    contadorAcertos ++;
+                    contadorAcertos ++;     //Controle de acertos - para verificar a vitória
                     acerto = true;
-                    jogadas[i] = letra;
+                    jogadas[i] = letra;     //Adiciona as letras no jogo
                 }
             }
+
+            //Mostra o estado do jogo
             System.out.println("Letras utilizadas: " + letrasAdicionadas);
             System.out.println(Arrays.toString(jogadas));
 
+            //Verifica vitória pela quantidade de acertos (tamanho do array)
             if (acerto) {
                 if (contadorAcertos == jogadas.length) {
                     System.out.println("===================================================================");
                     System.out.println("Parabéns! Você venceu o jogo faltando " + tentativas + " tentativas");
                     gameLoop = false;
                 }
+            //Caso seja alguma letra errada, o número de tentativas é decrementado
             } else {
                 System.out.println("A letra " + letra + " não está presente na palavra!");
                 tentativas --;
-
+                //Verifica GAME OVER pela quantidade de tentativas
                 if (tentativas == 0) {
                     System.out.println("===================================================================");
                     System.out.println("Que pena, você não conseguiu vencer este jogo.");
@@ -278,28 +283,33 @@ public class Exercicios {
         System.out.println("Quantidade de valores do array: ");
         int qtdValores = in.nextInt();
         int[] valores = new int [qtdValores];
+
+        //Preenche o array com valores
         for (int i = 0; i < qtdValores; i++) {
             System.out.println("Digite o valor " + (i+1));
             valores[i] = in.nextInt();
         }
-
+        //Ordena o array
         Arrays.sort(valores);
         int maisProx;
         int menorValor = valores[0];
         int maiorValor = valores[valores.length-1];
 
+        //Verifica o valor mais próximo a 0 vindo pelos valores negativos
         for (int i = 0; i < valores.length; i++) {
             if (valores[i] > menorValor && valores[i] < 0) {
                 menorValor = valores[i];
             }
         }
 
+        //Verifica o valor mais próximo a 0 vindo pelos valores positivos
         for (int i = valores.length -1; i >= 0; i--) {
             if (valores[i] < maiorValor && valores[i] > 0) {
                 maiorValor = valores[i];
             }
         }
 
+        //Compara o valor mais próximo positivo e negativo
         if ((maiorValor + menorValor) > 0) {
             maisProx = menorValor;
         } else if ((maiorValor + menorValor) < 0) {
@@ -308,9 +318,11 @@ public class Exercicios {
             maisProx = maiorValor;
         }
 
+        //Printa resultados
         System.out.println("O array é: ");
         System.out.println(Arrays.toString(valores));
         System.out.println("O valor mais próximo de zero é: " + maisProx);
+        in.close();
 
     }
 
