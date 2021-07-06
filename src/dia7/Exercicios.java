@@ -1,5 +1,6 @@
 package dia7;
 
+import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -209,25 +210,107 @@ public class Exercicios {
         // Caso o numero de tentativas chegue a 0 o usuário perde.
 
 
-        //NÃO TERMINADO
+        //Utilizando String
+
 
         Scanner in = new Scanner(System.in);
         String[] palavra = {"a", "b", "a", "c", "a", "x", "i"};
         String[] jogadas = {"_", "_", "_", "_", "_", "_", "_"};
+        List<String> letrasAdicionadas = new ArrayList<>();
         String letra = "";
         int tentativas = 10;
+        boolean acerto;
+        boolean gameLoop = true;
+        int contadorAcertos = 0;
 
-        while (tentativas > 0) {
-            System.out.println("Chute " + tentativas + ": ");
+
+        while (gameLoop) {
+            System.out.println("===================================================================");
+            acerto = false;         //Controle caso haja acerto
+            System.out.println("Tentativa número " + tentativas + ": ");
             letra = in.next();
+
+            //Verifica se a letra já foi utilizada e bloqueia caso positivo
+            if (letrasAdicionadas.contains(letra) ) {
+                System.out.println("A letra já foi utilizada!");
+                continue;
+            } else {
+                letrasAdicionadas.add(letra);
+            }
+
             for (int i = 0; i < palavra.length; i++) {
                 if (palavra[i].equals(letra)) {
+                    contadorAcertos ++;
+                    acerto = true;
                     jogadas[i] = letra;
-                    continue;
                 }
             }
-            tentativas --;
+            System.out.println("Letras utilizadas: " + letrasAdicionadas);
+            System.out.println(Arrays.toString(jogadas));
+
+            if (acerto) {
+                if (contadorAcertos == jogadas.length) {
+                    System.out.println("===================================================================");
+                    System.out.println("Parabéns! Você venceu o jogo faltando " + tentativas + " tentativas");
+                    gameLoop = false;
+                }
+            } else {
+                System.out.println("A letra " + letra + " não está presente na palavra!");
+                tentativas --;
+
+                if (tentativas == 0) {
+                    System.out.println("===================================================================");
+                    System.out.println("Que pena, você não conseguiu vencer este jogo.");
+                    System.out.println("A palavra era " + Arrays.toString(palavra));
+                    gameLoop = false;
+                }
+            }
         }
+        in.close();
+    }
+
+    public static void exercicio06() {
+        //Dado um array de números inteiros com valores negativos e positivos, encontro o número mais próximo de zero.
+        // Se ouver valores como 2 e -2, considere o número positivo.
+
+        Scanner in = new Scanner(System.in);
+        //int[] valores = {-50, 20, 35, 2, 8, -3, -2, 74, -30, -9, 10, 55, 13, -15, -1};
+        System.out.println("Quantidade de valores do array: ");
+        int qtdValores = in.nextInt();
+        int[] valores = new int [qtdValores];
+        for (int i = 0; i < qtdValores; i++) {
+            System.out.println("Digite o valor " + (i+1));
+            valores[i] = in.nextInt();
+        }
+
+        Arrays.sort(valores);
+        int maisProx;
+        int menorValor = valores[0];
+        int maiorValor = valores[valores.length-1];
+
+        for (int i = 0; i < valores.length; i++) {
+            if (valores[i] > menorValor && valores[i] < 0) {
+                menorValor = valores[i];
+            }
+        }
+
+        for (int i = valores.length -1; i >= 0; i--) {
+            if (valores[i] < maiorValor && valores[i] > 0) {
+                maiorValor = valores[i];
+            }
+        }
+
+        if ((maiorValor + menorValor) > 0) {
+            maisProx = menorValor;
+        } else if ((maiorValor + menorValor) < 0) {
+            maisProx = maiorValor;
+        } else {
+            maisProx = maiorValor;
+        }
+
+        System.out.println("O array é: ");
+        System.out.println(Arrays.toString(valores));
+        System.out.println("O valor mais próximo de zero é: " + maisProx);
 
     }
 
@@ -236,6 +319,8 @@ public class Exercicios {
         //exercicio02();
         //exercicio03();
         //exercicio04();
+        //exercicio05();
+        exercicio06();
     }
 
 
