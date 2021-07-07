@@ -215,7 +215,7 @@ public class Exercicios {
         //Inicializa variáveis
         Scanner in = new Scanner(System.in);
         System.out.println("Digite a palavra a ser adivinhada: ");
-        String respostaPalavra = in.next().trim();
+        String respostaPalavra = in.next().trim().toLowerCase();
         String[] palavra = respostaPalavra.split("");
         String[] jogadas = new String[palavra.length];
         Arrays.fill(jogadas, "_");
@@ -243,7 +243,7 @@ public class Exercicios {
 
             //Verifica se a letra selecionada faz parte da palavra
             for (int i = 0; i < palavra.length; i++) {
-                if (palavra[i].equals(letra)) {
+                if (palavra[i].equals(letra.toLowerCase())) {
                     contadorAcertos ++;     //Controle de acertos - para verificar a vitória
                     acerto = true;
                     jogadas[i] = letra;     //Adiciona as letras no jogo
