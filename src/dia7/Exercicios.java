@@ -212,12 +212,15 @@ public class Exercicios {
 
         //Utilizando String
 
-
+        //Inicializa variáveis
         Scanner in = new Scanner(System.in);
-        String[] palavra = {"a", "b", "a", "c", "a", "x", "i"};
-        String[] jogadas = {"_", "_", "_", "_", "_", "_", "_"};
+        System.out.println("Digite a palavra a ser adivinhada: ");
+        String respostaPalavra = in.next().trim();
+        String[] palavra = respostaPalavra.split("");
+        String[] jogadas = new String[palavra.length];
+        Arrays.fill(jogadas, "_");
         List<String> letrasAdicionadas = new ArrayList<>();
-        String letra = "";
+        String letra;
         int tentativas = 10;
         boolean acerto;
         boolean gameLoop = true;
@@ -276,7 +279,7 @@ public class Exercicios {
 
     public static void exercicio06() {
         //Dado um array de números inteiros com valores negativos e positivos, encontro o número mais próximo de zero.
-        // Se ouver valores como 2 e -2, considere o número positivo.
+        // Se houver valores como 2 e -2, considere o número positivo.
 
         Scanner in = new Scanner(System.in);
         //int[] valores = {-50, 20, 35, 2, 8, -3, -2, 74, -30, -9, 10, 55, 13, -15, -1};
@@ -331,8 +334,8 @@ public class Exercicios {
         //exercicio02();
         //exercicio03();
         //exercicio04();
-        //exercicio05();
-        exercicio06();
+        exercicio05();
+        //exercicio06();
     }
 
 
