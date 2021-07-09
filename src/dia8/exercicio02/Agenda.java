@@ -31,8 +31,12 @@ public class Agenda {
     }
 
     public void armazenaPessoa(String nome, int idade, float altura) {
-        contatos.add(new Pessoa(nome, idade, altura));
-        System.out.println("Contato adicionado com sucesso");
+        if (contatos.size() < capacidade ) {
+            contatos.add(new Pessoa(nome, idade, altura));
+            System.out.println("Contato adicionado com sucesso");
+        } else {
+            System.out.println("Desculpe, mas a capacidade está cheia");
+        }
     }
 
     public void removePessoa(String nome) {
