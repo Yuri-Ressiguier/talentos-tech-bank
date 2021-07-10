@@ -1,6 +1,4 @@
-package dia12;
-
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+package dia12.exercicio01;
 
 import java.util.Scanner;
 

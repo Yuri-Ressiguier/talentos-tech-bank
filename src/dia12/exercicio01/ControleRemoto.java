@@ -1,4 +1,4 @@
-package dia12;
+package dia12.exercicio01;
 
 public class ControleRemoto {
 
