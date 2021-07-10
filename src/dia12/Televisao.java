@@ -4,7 +4,7 @@ public class Televisao {
     private int volume;
     private int canal;
 
-    Televisao() {
+    public Televisao() {
         this.volume = 50;
         this.canal = 50;
     }
@@ -14,11 +14,17 @@ public class Televisao {
     }
 
     public void aumentarVolume() {
-        this.volume = volume - 1;
+        this.volume = volume + 1;
+        if (this.volume >= 100) {
+            this.volume = 100;
+        }
     }
 
     public void diminuirVolume() {
-        this.volume = volume + 1;
+        this.volume = volume - 1;
+        if (this.volume < 0) {
+            this.volume = 0;
+        }
     }
 
     public int getCanal() {
@@ -27,13 +33,22 @@ public class Televisao {
 
     public void diminuirCanal() {
         this.canal = canal -1;
+        if (this.canal < 0) {
+            this.canal = 0;
+        }
     }
 
     public void aumentarCanal() {
         this.canal = canal +1;
+        if (this.canal >= 100) {
+            this.canal = 100;
+        }
     }
 
     public void setCanal(int canal) {
+        if (canal < 0 || canal >= 100) {
+            return;
+        }
         this.canal = canal;
     }
 

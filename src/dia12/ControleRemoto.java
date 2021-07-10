@@ -4,7 +4,19 @@ public class ControleRemoto {
 
     private Televisao tv;
 
-    ControleRemoto(Televisao tv) {
+    public ControleRemoto() {
+
+    }
+
+    public ControleRemoto(Televisao tv) {
+        this.tv = tv;
+    }
+
+    public Televisao getTv() {
+        return tv;
+    }
+
+    public void setTv(Televisao tv) {
         this.tv = tv;
     }
 
