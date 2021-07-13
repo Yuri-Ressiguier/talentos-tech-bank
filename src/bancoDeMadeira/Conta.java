@@ -1,27 +1,47 @@
 package bancoDeMadeira;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 
 public abstract class Conta {
 
+    private static List<String> listaIds = new ArrayList<>();
+    private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
     //Atributos
-    //private final int id;
+    private String id;
     private double saldo;
+    private double limiteChequeEspecial;
     private Cliente cliente;
     private Gerente gerente;
+    private Date datacCriacao;
     List<Double> extrato = new ArrayList<>();
 
-    public Conta(Cliente cliente, Gerente gerente) {
-        this.saldo = 0;
+    public Conta(Cliente cliente, Gerente gerente, double saldo) {
+        verificaIdRepetido();
+        depositar(saldo);
+        this.limiteChequeEspecial = 0;
         this.cliente = cliente;
         this.gerente = gerente;
+        this.datacCriacao = new Date();
+        System.out.println("Conta " + this.id + " criada com sucesso!");
 
     }
 
-    public int getId() {
+    private void verificaIdRepetido() {
+        Random r = new Random();
+        String randomNumber = String.format("%04d", r.nextInt(1001));
+        if (listaIds.contains(randomNumber)) {
+            verificaIdRepetido();
+        } else {
+            this.id = randomNumber;
+        }
+
+
+    }
+
+    public String getId() {
         return id;
     }
 
@@ -50,20 +70,18 @@ public abstract class Conta {
         this.limiteChequeEspecial = limiteChequeEspecial;
     }
 
-    private double limiteChequeEspecial;
 
     //Métodos
     public void listarExtrato() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("===EXTRATO===");
+
         for (Double valor : extrato) {
             if (valor > 0) {
-                sb.append("Depósito: " + valor + "\n");
-            } else {
-                sb.append("Saque: " + valor + "\n");
+                System.out.println("Depósito: " + valor);
+            } else if (valor < 0){
+                System.out.println("Saque: " + valor);
             }
         }
-        System.out.println(sb);
+        System.out.println("Saldo: " + this.saldo);
     }
 
     public void realizarSaque(double valor) {
@@ -71,25 +89,20 @@ public abstract class Conta {
         if (saldo >= valor) {
             saldo -= valor;
             extrato.add(-valor);
-        } else {
-            System.out.println("Saldo indisponível");
-            /*
-            System.out.println("Deseja utilizar o cheque especial? (S/N)");
-            char resposta = in.next().toLowerCase().charAt(0);
-            if (resposta == 's') {
-                double total = valor - (saldo + limiteChequeEspecial);
-                saldo = 0;
-                if (total > 0) {
-                    System.out.println("Limite de saque do cheque ultrapassado em " + total + " reais. Deseja Sacar mesmo assim? (S/N)");
-                }
-                resposta = in.next().toLowerCase().charAt(0);
-                if (resposta == 's') {
-                    System.out.println("Valor sacado: " + valor);
-                }
+            System.out.println("Saque realizado com sucesso!");
 
+        } else {
+            double total = saldo + limiteChequeEspecial - valor;
+            if (total >= 0) {
+                extrato.add(-valor);
+                double totalChequeEspecial = saldo - valor + limiteChequeEspecial;
+                System.out.println("Entrando no limite do cheque especial");
+                System.out.println("Um valor de 5% será cobrado sobre sua dívida no Cheque Especial");
+                this.saldo = totalChequeEspecial - limiteChequeEspecial  * 1.05;
+            } else {
+                System.out.println("Saldo indisponível");
             }
 
-             */
         }
 
     }
@@ -97,27 +110,38 @@ public abstract class Conta {
     public void depositar(double valor) {
         saldo += valor;
         extrato.add(valor);
+        System.out.println("Depósito realizado com sucesso!");
 
     }
 
-    public void adicionarLimiteChequeEspecial() {
-        Scanner in = new Scanner(System.in);
-        int senha = in.nextInt();
-        if (this.gerente.verificaChequeEspecial(senha))
-        {
+    public void adicionarLimiteChequeEspecial(int senha) {
+        if (this.gerente.verificaChequeEspecial(senha)) {
+            System.out.println("Limite cheque especial gerado com sucesso!");
             this.limiteChequeEspecial = cliente.getSalario() * 0.3;
+            System.out.println("O valor é: " + this.limiteChequeEspecial);
         } else {
+            System.out.println("Senha do Gerente incorreta");
             this.limiteChequeEspecial = 0;
+        }
+    }
+
+    public boolean checaConta() {
+        if (saldo != 0) {
+            System.out.println("Favor checar saldo. O valor deve ser 0 para deletar a conta");
+            return false;
+        } else  {
+            System.out.println("Sua conta foi removida com sucesso!");
+            return true;
         }
     }
 
     @Override
     public String toString() {
-        return "Conta{" +
+        return "Conta [" +
                 "id='" + id + '\'' +
                 ", saldo=" + saldo +
                 ", cliente=" + cliente.getNome() +
                 ", limiteChequeEspecial=" + limiteChequeEspecial +
-                '}';
+                ']';
     }
 }
