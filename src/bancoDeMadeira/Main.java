@@ -32,8 +32,24 @@ public class Main {
         String id;                                                  //Para consultar as contas através dos IDs
         double valor;                                               //Armazena valor das operações
 
+
         Gerente gerente =  new Gerente(123123);                //Cria um gerente ficticio para aprovar Cheque Especial
 
+
+        /*
+        Programa base do programa:
+        Mostra um menu para o usuário selecionar:
+        1 - Cria uma conta no banco
+        2 - Acessa a conta através do ID
+            2.1 - Lista o extrato mostrando as mudanças de saldo
+            2.2 - Saca valores com limite máximo de saldo + limite chqeue especial
+            2.3 - Deposito
+            2.4 - AdicionarLimiteChequeEspecial (Adiciona 30% do salário do cliente como limite do cheque especial)
+            2.0 - Retornar ao menu principal
+        3 - Lista todas as contas registradas no banco
+        4 - Encerra a conta caso o saldos seja 0
+        0 - Sai do programa
+         */
         System.out.println("Bem vindo ao Banco de Madeira [MODO FUNCIONÁRIO]");
         while (sistemaLoop) {
             System.out.println("1: Criar Conta / 2: Acessar Conta (ID) / 3: Listar Tudo / 4: Encerrar Conta / 0: Sair");
@@ -41,10 +57,12 @@ public class Main {
             op = in.nextInt();
 
             switch (op) {
+                //Sair do programa
                 case 0:
                     System.out.println("=== SAINDO DO SISTEMA ===");
                     sistemaLoop = false;
                     break;
+                //Cria conta
                 case 1:
                     in.nextLine();
                     System.out.println("=== CRIAR CONTA ===");
@@ -86,7 +104,7 @@ public class Main {
                         System.out.println("Erro, resposta inválida");
                     }
                     break;
-
+                //Acessa conta
                 case 2:
                     System.out.println("=== ACESSAR CONTA ===");
                     System.out.println("Qual é o ID?");
@@ -102,14 +120,17 @@ public class Main {
                             validaInteiro(in);
                             opAninhada = in.nextInt();
                             switch (opAninhada) {
+                                //Volta para o menu principal
                                 case 0:
                                     System.out.println("=== RETORNANDO AO MENU PRINCIPAL ===");
                                     sistemaLoopInterno = false;
                                     break;
+                                //Mostra o extrato da conta
                                 case 1:
                                     System.out.println("=== EXTRATO ===");
                                     contaSelecionada.listarExtrato();
                                     break;
+                                //Saca valores
                                 case 2:
                                     System.out.println("=== SAQUE ===");
                                     System.out.println("Qual o valor do saque?");
@@ -117,6 +138,7 @@ public class Main {
                                     valor = in.nextDouble();
                                     contaSelecionada.realizarSaque(valor);
                                     break;
+                                //Deposita valores
                                 case 3:
                                     System.out.println("== DEPOSITO ==");
                                     System.out.println("Qual o valor do depósito?");
@@ -124,6 +146,7 @@ public class Main {
                                     valor = in.nextDouble();
                                     contaSelecionada.depositar(valor);
                                     break;
+                                //Adiciona limite do cheque especial
                                 case 4:
                                     System.out.println("== ADD LIMITE CHEQUE ESPECIAL ==");
                                     System.out.println("Esta operação necessita de um Gerente. Digite a senha do gerente desta conta: ");
@@ -138,6 +161,7 @@ public class Main {
                         System.out.println("Conta não encontrada");
                         break;          //Fecha case2
                     }
+                //Lista todas as contas do banco
                 case 3:
                     System.out.println("=== LISTAR TUDO ===");
                     for (Map.Entry<String, Conta> contas : sistemaDeContas.entrySet()) {
@@ -145,6 +169,7 @@ public class Main {
                         System.out.println("==========================");
                     }
                     break;
+                //Encerra a conta
                 case 4:
                     System.out.println("=== ENCERRAR CONTA ===");
                     System.out.println("Digite o ID da sua conta: ");

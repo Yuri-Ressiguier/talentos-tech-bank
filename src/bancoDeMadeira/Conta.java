@@ -18,6 +18,7 @@ public abstract class Conta {
     private Date datacCriacao;
     List<Double> extrato = new ArrayList<>();
 
+    //Construtor
     public Conta(Cliente cliente, Gerente gerente, double saldo) {
         verificaIdRepetido();
         depositar(saldo);
@@ -29,22 +30,11 @@ public abstract class Conta {
 
     }
 
-    private void verificaIdRepetido() {
-        Random r = new Random();
-        String randomNumber = String.format("%04d", r.nextInt(1001));
-        if (listaIds.contains(randomNumber)) {
-            verificaIdRepetido();
-        } else {
-            this.id = randomNumber;
-        }
 
-
-    }
-
+    //Getters e Setters
     public String getId() {
         return id;
     }
-
 
     public double getSaldo() {
         return saldo;
@@ -70,8 +60,17 @@ public abstract class Conta {
         this.limiteChequeEspecial = limiteChequeEspecial;
     }
 
-
     //Métodos
+    private void verificaIdRepetido() {
+        Random r = new Random();
+        String randomNumber = String.format("%04d", r.nextInt(1001));
+        if (listaIds.contains(randomNumber)) {
+            verificaIdRepetido();
+        } else {
+            this.id = randomNumber;
+        }
+    }
+
     public void listarExtrato() {
 
         for (Double valor : extrato) {

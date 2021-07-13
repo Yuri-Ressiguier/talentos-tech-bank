@@ -1,6 +1,7 @@
 package bancoDeMadeira;
 
 public class Gerente {
+
     private int senha;
 
     public Gerente(int senha) {

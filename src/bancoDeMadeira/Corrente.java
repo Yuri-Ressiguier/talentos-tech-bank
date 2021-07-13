@@ -8,7 +8,6 @@ public class Corrente extends Conta{
         super(cliente, gerente, saldo);
     }
 
-
     public void calculaLimite() {
         limite = this.getCliente().getSalario() * 1.15;
     }
