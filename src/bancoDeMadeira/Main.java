@@ -42,9 +42,10 @@ public class Main {
         1 - Cria uma conta no banco
         2 - Acessa a conta através do ID
             2.1 - Lista o extrato mostrando as mudanças de saldo
-            2.2 - Saca valores com limite máximo de saldo + limite chqeue especial
+            2.2 - Saca valores com limite máximo de saldo + limite cheque especial
             2.3 - Deposito
             2.4 - AdicionarLimiteChequeEspecial (Adiciona 30% do salário do cliente como limite do cheque especial)
+            2.5 - Transferência (Pedir id de outro objeto)
             2.0 - Retornar ao menu principal
         3 - Lista todas as contas registradas no banco
         4 - Encerra a conta caso o saldos seja 0

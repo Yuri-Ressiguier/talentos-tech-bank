@@ -6,6 +6,7 @@ import java.util.*;
 
 public abstract class Conta {
 
+    //Armazena os ids de todas as contas
     private static List<String> listaIds = new ArrayList<>();
     private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
@@ -16,6 +17,7 @@ public abstract class Conta {
     private Cliente cliente;
     private Gerente gerente;
     private Date datacCriacao;
+    private int contadorChequeEspecial;
     List<Double> extrato = new ArrayList<>();
 
     //Construtor
@@ -23,6 +25,7 @@ public abstract class Conta {
         verificaIdRepetido();
         depositar(saldo);
         this.limiteChequeEspecial = 0;
+        this.contadorChequeEspecial = 0;
         this.cliente = cliente;
         this.gerente = gerente;
         this.datacCriacao = new Date();
@@ -61,6 +64,8 @@ public abstract class Conta {
     }
 
     //Métodos
+
+    //Verifica se o id já está sendo utilizado pelo outro cliente
     private void verificaIdRepetido() {
         Random r = new Random();
         String randomNumber = String.format("%04d", r.nextInt(1001));
@@ -72,7 +77,6 @@ public abstract class Conta {
     }
 
     public void listarExtrato() {
-
         for (Double valor : extrato) {
             if (valor > 0) {
                 System.out.println("Depósito: " + valor);
@@ -81,6 +85,7 @@ public abstract class Conta {
             }
         }
         System.out.println("Saldo: " + this.saldo);
+        System.out.println("Limite cheque especial: " + this.limiteChequeEspecial);
     }
 
     public void realizarSaque(double valor) {
@@ -91,26 +96,38 @@ public abstract class Conta {
             System.out.println("Saque realizado com sucesso!");
 
         } else {
+            //Cheque especial 5% do valor do cheque especial
             double total = saldo + limiteChequeEspecial - valor;
             if (total >= 0) {
+                this.contadorChequeEspecial +=1;
                 extrato.add(-valor);
-                double totalChequeEspecial = saldo - valor + limiteChequeEspecial;
+                double totalChequeEspecial = saldo - valor + limiteChequeEspecial; // 1000 - 1200 + 300 = 100
                 System.out.println("Entrando no limite do cheque especial");
                 System.out.println("Um valor de 5% será cobrado sobre sua dívida no Cheque Especial");
-                this.saldo = totalChequeEspecial - limiteChequeEspecial  * 1.05;
+                this.saldo = totalChequeEspecial - limiteChequeEspecial  * 1.05; //100 - 300 = -200 + 5%
             } else {
-                System.out.println("Saldo indisponível");
+                //Caso o cliente exceda o valor do cheque especial e tenha entrado menos de 5 vezes nesta condição de cheque especial
+                //10% do valor da
+                if (contadorChequeEspecial < 5) {
+                    System.out.println("Condição especial de cheque especial: ");
+                    System.out.println("Você ultrapassou o limite do cheque especial, mas temos uma condição para você cliente amigo," +
+                            " será acrescentado " + this.limiteChequeEspecial*2 + ". O juro sobre esta condição será 10%");
+                    double totalChequeEspecial = saldo - valor + limiteChequeEspecial + limiteChequeEspecial*2; //1000 - 1800 +300 +600 = 100
+                    this.saldo = totalChequeEspecial - limiteChequeEspecial*2 * 1.10 - limiteChequeEspecial * 1.05; // 100 - 660 - 315= -875
+                } else {
+                    System.out.println("Saldo indisponível");
+                }
             }
-
         }
-
     }
 
     public void depositar(double valor) {
         saldo += valor;
         extrato.add(valor);
-        System.out.println("Depósito realizado com sucesso!");
-
+        //Controle para não mostrar caso o usuário não entre com valor inicial
+        if (valor != 0) {
+            System.out.println("Depósito realizado com sucesso!");
+        }
     }
 
     public void adicionarLimiteChequeEspecial(int senha) {
