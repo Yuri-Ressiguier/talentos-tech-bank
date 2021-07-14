@@ -1,5 +1,4 @@
 package bancoDeMadeira;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -50,20 +49,22 @@ public class Main {
         Mostra um menu para o usuário selecionar:
         1 - Cria uma conta no banco
         2 - Acessa a conta através do ID
-            2.1 - Lista o extrato mostrando as mudanças de saldo
-            2.2 - Saca valores com limite máximo de saldo + limite cheque especial
-            2.3 - Deposito
-            2.4 - AdicionarLimiteChequeEspecial (Adiciona 30% do salário do cliente como limite do cheque especial)
+            2.1 - Mostra o status da conta
+            2.2 - Lista o extrato mostrando as mudanças de saldo
+            2.3 - Saca valores com limite máximo de saldo + limite cheque especial
+            2.4 - Deposito
             2.5 - Transferência (Pedir id de outro objeto)
-            2.6 - Mostra rendimentos (Conta poupança)
+            2.6 - Mostrar Rendimentos (Conta Poupança)
             2.7 - Solicita Empréstimo (Conta corrente)
             2.8 - Paga empréstimo (Conta corrente)
+            2.9 - AdicionarLimiteChequeEspecial (Adiciona 30% do salário do cliente como limite do cheque especial)
             2.0 - Retornar ao menu principal
         3 - Lista todas as contas registradas no banco
         4 - Encerra a conta caso o saldos seja 0
         0 - Sai do programa
          */
-        System.out.println("Bem vindo ao Banco de Madeira [MODO FUNCIONÁRIO]");
+
+        System.out.println("Bem vindo ao Banco de Madeira [MODO FUNCIONÁRIO] BETA (1.3)");
         inicioPrograma = LocalDateTime.now();
         Banco banco = new Banco(6); //Nosso banco criado
         while (sistemaLoop) {

@@ -22,7 +22,7 @@ public abstract class Conta {
     private Banco banco;
     private LocalDateTime dataCriacao;
     private int contadorChequeEspecial;
-    Map<String, Double> extrato = new HashMap<>();
+    Map<String, Double> extrato = new LinkedHashMap<>();
 
 
     //Construtor
@@ -114,7 +114,7 @@ public abstract class Conta {
                 double totalChequeEspecial = saldo - valor + limiteChequeEspecial; // 1000 - 1200 + 300 = 100
                 System.out.println("Entrando no limite do cheque especial");
                 System.out.println("Um valor de 5% será cobrado sobre sua dívida no Cheque Especial");
-                this.saldo = totalChequeEspecial - limiteChequeEspecial  * 1.05; //100 - 300 = -200 + 5%
+                this.saldo = (totalChequeEspecial - limiteChequeEspecial)  * 1.05; //100 - 300 = -200 + 5%
             } else {
                 //Caso o cliente exceda o valor do cheque especial e tenha entrado menos de 5 vezes nesta condição de cheque especial
                 //10% do valor da
@@ -125,7 +125,7 @@ public abstract class Conta {
                     System.out.println("Você ultrapassou o limite do cheque especial, mas temos uma condição para você cliente amigo," +
                             " será acrescentado " + this.limiteChequeEspecial*2 + ". Os juros sobre esta condição será 10%");
                     double totalChequeEspecial = saldo - valor + limiteChequeEspecial + limiteChequeEspecial*2; //1000 - 1800 +300 +600 = 100
-                    this.saldo = totalChequeEspecial - limiteChequeEspecial*2 * 1.10 - limiteChequeEspecial * 1.05; // 100 - 660 - 315= -875
+                    this.saldo = (totalChequeEspecial - limiteChequeEspecial*2) * 1.10 - limiteChequeEspecial * 1.05; // 100 - 660 - 315= -875
                 } else {
                     System.out.println("Saldo indisponível");
                 }
