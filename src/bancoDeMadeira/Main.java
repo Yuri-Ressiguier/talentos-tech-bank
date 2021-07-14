@@ -24,7 +24,6 @@ public class Main {
     public static void main(String[] args) {
         Locale.setDefault(Locale.US);
         Scanner in = new Scanner(System.in);
-        Map<String, Conta> sistemaDeContas = new HashMap<>();       //Armazena Contas
         boolean sistemaLoop = true;                                 //Controla Loop
         boolean sistemaLoopInterno;                                 //Controla os subloops
         int op;                                                     //Operador do sistema
@@ -34,6 +33,7 @@ public class Main {
 
 
         Gerente gerente =  new Gerente(123123);                //Cria um gerente ficticio para aprovar Cheque Especial
+
 
 
         /*
@@ -52,11 +52,11 @@ public class Main {
         0 - Sai do programa
          */
         System.out.println("Bem vindo ao Banco de Madeira [MODO FUNCIONÁRIO]");
+        Banco banco = new Banco(6); //Nosso banco criado
         while (sistemaLoop) {
             System.out.println("1: Criar Conta / 2: Acessar Conta (ID) / 3: Listar Tudo / 4: Encerrar Conta / 0: Sair");
             validaInteiro(in);
             op = in.nextInt();
-
             switch (op) {
                 //Sair do programa
                 case 0:
@@ -71,7 +71,7 @@ public class Main {
                     String nomeCliente = in.nextLine();
                     System.out.println("Qual a renda mensal do cliente? ");
                     double rendaMensal =  in.nextDouble();
-                    //Cria cliente
+                    //Cria cliente para criar uma conta
                     Cliente cliente = new Cliente(nomeCliente, rendaMensal);
                     System.out.println("Qual a conta o cliente deseja abrir? (C = Corrente / P = Poupança)");
                     char resposta = in.next().toLowerCase().charAt(0);
@@ -79,27 +79,23 @@ public class Main {
                         System.out.println("Deseja adicionar um saldo inicial? (s/n)");
                         resposta = in.next().toLowerCase().charAt(0);
                         if (resposta == 's') {
-                            System.out.println("Quanto? ");
+                            System.out.println("Qual o valor? ");
                             validaDouble(in);
                             valor = in.nextDouble();
-                            Conta conta = new Corrente(cliente, gerente, valor);
-                            sistemaDeContas.put(conta.getId(), conta);
+                            banco.criarContaCorrente(cliente, gerente, valor);
                         } else {
-                            Conta conta = new Corrente(cliente, gerente, 0);
-                            sistemaDeContas.put(conta.getId(), conta);
+                            banco.criarContaCorrente(cliente, gerente, 0);
                         }
                     } else if (resposta == 'p') {
                         System.out.println("Deseja adicionar um saldo inicial? (s/n)");
                         resposta = in.next().toLowerCase().charAt(0);
                         if (resposta == 's') {
-                            System.out.println("Quanto? ");
+                            System.out.println("Qual o valor? ");
                             validaDouble(in);
                             valor = in.nextDouble();
-                            Conta conta = new Poupanca(cliente, gerente, valor);
-                            sistemaDeContas.put(conta.getId(), conta);
+                            banco.criarContaPoupanca(cliente, gerente, valor);
                         } else {
-                            Conta conta = new Poupanca(cliente, gerente, 0);
-                            sistemaDeContas.put(conta.getId(), conta);
+                            banco.criarContaPoupanca(cliente, gerente, 0);
                         }
                     } else {
                         System.out.println("Erro, resposta inválida");
@@ -111,13 +107,12 @@ public class Main {
                     System.out.println("Qual é o ID?");
                     validaInteiro(in);
                     id = in.next();
-                    if (sistemaDeContas.containsKey(id)) {
-                        Conta contaSelecionada = sistemaDeContas.get(id);
-                        System.out.println(contaSelecionada.toString());
+                    Conta contaSelecionada = banco.acessarConta(id);
+                    if (contaSelecionada != null) {
                         sistemaLoopInterno = true;
                         System.out.println("Qual operação você deseja fazer? ");
                         while (sistemaLoopInterno) {
-                            System.out.println("1: Listar Extrato / 2: Saque / 3: Deposito / 4: AdicionarLimiteChequeEspecial / 0: Retornar ao menu");
+                            System.out.println("1: Mostrar Conta / 2: Listar Extrato / 3: Saque / 4: Deposito / 5: Transferência / 6: AdicionarLimiteChequeEspecial / 0: Retornar ao menu");
                             validaInteiro(in);
                             opAninhada = in.nextInt();
                             switch (opAninhada) {
@@ -126,13 +121,17 @@ public class Main {
                                     System.out.println("=== RETORNANDO AO MENU PRINCIPAL ===");
                                     sistemaLoopInterno = false;
                                     break;
-                                //Mostra o extrato da conta
+                                //Mostra os atributos da conta
                                 case 1:
+                                    contaSelecionada.mostrarConta();
+                                    break;
+                                //Mostra o extrato da conta
+                                case 2:
                                     System.out.println("=== EXTRATO ===");
                                     contaSelecionada.listarExtrato();
                                     break;
                                 //Saca valores
-                                case 2:
+                                case 3:
                                     System.out.println("=== SAQUE ===");
                                     System.out.println("Qual o valor do saque?");
                                     validaDouble(in);
@@ -140,15 +139,24 @@ public class Main {
                                     contaSelecionada.realizarSaque(valor);
                                     break;
                                 //Deposita valores
-                                case 3:
+                                case 4:
                                     System.out.println("== DEPOSITO ==");
                                     System.out.println("Qual o valor do depósito?");
                                     validaDouble(in);
                                     valor = in.nextDouble();
                                     contaSelecionada.depositar(valor);
                                     break;
+                                //Transfere dinheiro para outra conta
+                                case 5:
+                                    System.out.println("=== TRANSFERÊNCIA ===");
+                                    System.out.println("Qual é o ID do favorecido? (4 dígitos)");
+                                    id = in.next();
+                                    System.out.println("Qual o valor da transferência?");
+                                    valor = in.nextDouble();
+                                    contaSelecionada.transferencia(id, valor);
+                                    break;
                                 //Adiciona limite do cheque especial
-                                case 4:
+                                case 6:
                                     System.out.println("== ADD LIMITE CHEQUE ESPECIAL ==");
                                     System.out.println("Esta operação necessita de um Gerente. Digite a senha do gerente desta conta: ");
                                     contaSelecionada.adicionarLimiteChequeEspecial(in.nextInt());
@@ -165,10 +173,7 @@ public class Main {
                 //Lista todas as contas do banco
                 case 3:
                     System.out.println("=== LISTAR TUDO ===");
-                    for (Map.Entry<String, Conta> contas : sistemaDeContas.entrySet()) {
-                        System.out.println(contas.getValue().toString());
-                        System.out.println("==========================");
-                    }
+                    banco.listarContas();
                     break;
                 //Encerra a conta
                 case 4:
@@ -176,19 +181,8 @@ public class Main {
                     System.out.println("Digite o ID da sua conta: ");
                     validaInteiro(in);
                     id = in.next();
-                    if (sistemaDeContas.containsKey(id)) {
-                        Conta contaSelecionada = sistemaDeContas.get(id);
-                        if (contaSelecionada.checaConta()) {
-                            System.out.println("Conta " + id + " removida com sucesso");
-                            sistemaDeContas.remove(id);
-                            break;
-                        } else {
-                            break;
-                        }
-                    } else {
-                        System.out.println("Conta não encontrada");
-                        break;
-                    }
+                    banco.encerrarConta(id);
+                    break;
                 default:
                     System.out.println("Valor informado incorreto!");
             }

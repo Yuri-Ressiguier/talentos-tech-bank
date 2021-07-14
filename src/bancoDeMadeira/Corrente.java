@@ -4,8 +4,8 @@ public class Corrente extends Conta{
 
     private double limite;
 
-    public Corrente(Cliente cliente, Gerente gerente, double saldo) {
-        super(cliente, gerente, saldo);
+    public Corrente(Cliente cliente, Gerente gerente, Banco banco, double saldo) {
+        super(cliente, gerente, banco, saldo);
     }
 
     public void calculaLimite() {

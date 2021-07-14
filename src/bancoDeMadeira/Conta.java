@@ -8,7 +8,7 @@ public abstract class Conta {
 
     //Armazena os ids de todas as contas
     private static List<String> listaIds = new ArrayList<>();
-    private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    //private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
     //Atributos
     private String id;
@@ -16,18 +16,20 @@ public abstract class Conta {
     private double limiteChequeEspecial;
     private Cliente cliente;
     private Gerente gerente;
+    private Banco banco;
     private Date datacCriacao;
     private int contadorChequeEspecial;
     List<Double> extrato = new ArrayList<>();
 
     //Construtor
-    public Conta(Cliente cliente, Gerente gerente, double saldo) {
+    public Conta(Cliente cliente, Gerente gerente, Banco banco,  double saldo) {
         verificaIdRepetido();
         depositar(saldo);
         this.limiteChequeEspecial = 0;
         this.contadorChequeEspecial = 0;
         this.cliente = cliente;
         this.gerente = gerente;
+        this.banco = banco;
         this.datacCriacao = new Date();
         System.out.println("Conta " + this.id + " criada com sucesso!");
 
@@ -76,6 +78,10 @@ public abstract class Conta {
         }
     }
 
+    public void mostrarConta() {
+        System.out.println(this.toString());
+    }
+
     public void listarExtrato() {
         for (Double valor : extrato) {
             if (valor > 0) {
@@ -84,8 +90,8 @@ public abstract class Conta {
                 System.out.println("Saque: " + valor);
             }
         }
-        System.out.println("Saldo: " + this.saldo);
-        System.out.println("Limite cheque especial: " + this.limiteChequeEspecial);
+        System.out.printf("Saldo: %.2f%n", this.saldo);
+        System.out.printf("Limite cheque especial: %.2f%n", this.limiteChequeEspecial);
     }
 
     public void realizarSaque(double valor) {
@@ -111,7 +117,7 @@ public abstract class Conta {
                 if (contadorChequeEspecial < 5) {
                     System.out.println("Condição especial de cheque especial: ");
                     System.out.println("Você ultrapassou o limite do cheque especial, mas temos uma condição para você cliente amigo," +
-                            " será acrescentado " + this.limiteChequeEspecial*2 + ". O juro sobre esta condição será 10%");
+                            " será acrescentado " + this.limiteChequeEspecial*2 + ". Os juros sobre esta condição será 10%");
                     double totalChequeEspecial = saldo - valor + limiteChequeEspecial + limiteChequeEspecial*2; //1000 - 1800 +300 +600 = 100
                     this.saldo = totalChequeEspecial - limiteChequeEspecial*2 * 1.10 - limiteChequeEspecial * 1.05; // 100 - 660 - 315= -875
                 } else {
@@ -140,6 +146,19 @@ public abstract class Conta {
             this.limiteChequeEspecial = 0;
         }
     }
+     public void transferencia(String id, double valor) {
+        if (saldo >= valor) {
+            if (banco.acessarConta(id) != null) {
+                Conta conta = banco.acessarConta(id);
+                conta.depositar(valor);
+                this.realizarSaque(valor);
+            } else {
+                System.out.println("Conta não encontrada");
+            }
+        } else {
+            System.out.println("Saldo insuficiente");
+        }
+     }
 
     public boolean checaConta() {
         if (saldo != 0) {
@@ -155,7 +174,7 @@ public abstract class Conta {
     public String toString() {
         return "Conta [" +
                 "id='" + id + '\'' +
-                ", saldo=" + saldo +
+                String.format(", saldo= %.2f", saldo) +
                 ", cliente=" + cliente.getNome() +
                 ", limiteChequeEspecial=" + limiteChequeEspecial +
                 ']';
