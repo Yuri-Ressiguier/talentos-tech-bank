@@ -49,4 +49,12 @@ public class Banco {
             }
         }
     }
+
+    public void rendePoupanca() {
+        for (Map.Entry<String, Conta> contas : sistemaDeContas.entrySet()) {
+            if (contas.getValue() instanceof Poupanca) {
+                ((Poupanca) contas.getValue()).adicionaRendimentos();   //Downcasting
+            }
+        }
+    }
 }

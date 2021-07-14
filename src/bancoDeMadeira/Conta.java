@@ -1,25 +1,29 @@
 package bancoDeMadeira;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+
 
 
 public abstract class Conta {
 
     //Armazena os ids de todas as contas
     private static List<String> listaIds = new ArrayList<>();
-    //private static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    protected static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
     //Atributos
     private String id;
-    private double saldo;
+    protected double saldo;
     private double limiteChequeEspecial;
     private Cliente cliente;
     private Gerente gerente;
     private Banco banco;
-    private Date datacCriacao;
+    private LocalDateTime dataCriacao;
     private int contadorChequeEspecial;
-    List<Double> extrato = new ArrayList<>();
+    Map<String, Double> extrato = new HashMap<>();
+
 
     //Construtor
     public Conta(Cliente cliente, Gerente gerente, Banco banco,  double saldo) {
@@ -30,13 +34,13 @@ public abstract class Conta {
         this.cliente = cliente;
         this.gerente = gerente;
         this.banco = banco;
-        this.datacCriacao = new Date();
+        this.dataCriacao = LocalDateTime.now();
         System.out.println("Conta " + this.id + " criada com sucesso!");
 
     }
 
 
-    //Getters e Setters
+    //Getters e Setters (A maioria não pode ter SET diretamente)
     public String getId() {
         return id;
     }
@@ -45,24 +49,24 @@ public abstract class Conta {
         return saldo;
     }
 
-    public void setSaldo(double saldo) {
-        this.saldo = saldo;
-    }
-
     public Cliente getCliente() {
         return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
     }
 
     public double getLimiteChequeEspecial() {
         return limiteChequeEspecial;
     }
 
-    public void setLimiteChequeEspecial(double limiteChequeEspecial) {
-        this.limiteChequeEspecial = limiteChequeEspecial;
+    public Banco getBanco() {
+        return banco;
+    }
+
+    public LocalDateTime getDataCriacao() {
+        return this.dataCriacao;
+    }
+
+    public String getDataCriacaoString() {
+        return dataCriacao.format(formatter);
     }
 
     //Métodos
@@ -83,11 +87,11 @@ public abstract class Conta {
     }
 
     public void listarExtrato() {
-        for (Double valor : extrato) {
-            if (valor > 0) {
-                System.out.println("Depósito: " + valor);
-            } else if (valor < 0){
-                System.out.println("Saque: " + valor);
+        for (Map.Entry<String, Double> valor : extrato.entrySet()) {
+            if (valor.getValue() > 0) {
+                System.out.println("Data: " + valor.getKey() + " .Depósito: " + valor.getValue());
+            } else if (valor.getValue() < 0){
+                System.out.println("Data: " + valor.getKey() + " .Saque: " + valor.getValue());
             }
         }
         System.out.printf("Saldo: %.2f%n", this.saldo);
@@ -98,7 +102,7 @@ public abstract class Conta {
         Scanner in =  new Scanner(System.in);
         if (saldo >= valor) {
             saldo -= valor;
-            extrato.add(-valor);
+            extrato.put(LocalDateTime.now().format(formatter), -valor);
             System.out.println("Saque realizado com sucesso!");
 
         } else {
@@ -106,7 +110,7 @@ public abstract class Conta {
             double total = saldo + limiteChequeEspecial - valor;
             if (total >= 0) {
                 this.contadorChequeEspecial +=1;
-                extrato.add(-valor);
+                extrato.put(LocalDateTime.now().format(formatter), -valor);
                 double totalChequeEspecial = saldo - valor + limiteChequeEspecial; // 1000 - 1200 + 300 = 100
                 System.out.println("Entrando no limite do cheque especial");
                 System.out.println("Um valor de 5% será cobrado sobre sua dívida no Cheque Especial");
@@ -114,7 +118,9 @@ public abstract class Conta {
             } else {
                 //Caso o cliente exceda o valor do cheque especial e tenha entrado menos de 5 vezes nesta condição de cheque especial
                 //10% do valor da
-                if (contadorChequeEspecial < 5) {
+                total = saldo + limiteChequeEspecial*3 - valor;
+                if (contadorChequeEspecial < 5 && total >= 0) {
+                    extrato.put(LocalDateTime.now().format(formatter), -valor);
                     System.out.println("Condição especial de cheque especial: ");
                     System.out.println("Você ultrapassou o limite do cheque especial, mas temos uma condição para você cliente amigo," +
                             " será acrescentado " + this.limiteChequeEspecial*2 + ". Os juros sobre esta condição será 10%");
@@ -129,7 +135,7 @@ public abstract class Conta {
 
     public void depositar(double valor) {
         saldo += valor;
-        extrato.add(valor);
+        extrato.put(LocalDateTime.now().format(formatter), valor);
         //Controle para não mostrar caso o usuário não entre com valor inicial
         if (valor != 0) {
             System.out.println("Depósito realizado com sucesso!");
@@ -173,10 +179,11 @@ public abstract class Conta {
     @Override
     public String toString() {
         return "Conta [" +
-                "id='" + id + '\'' +
-                String.format(", saldo= %.2f", saldo) +
-                ", cliente=" + cliente.getNome() +
-                ", limiteChequeEspecial=" + limiteChequeEspecial +
+                "Data de Criação = " + this.getDataCriacaoString() +
+                ", ID ='" + id + '\'' +
+                ", Cliente = " + cliente.getNome() +
+                String.format(", Saldo = %.2f", saldo) +
+                ", LimiteChequeEspecial =" + limiteChequeEspecial +
                 ']';
     }
 }

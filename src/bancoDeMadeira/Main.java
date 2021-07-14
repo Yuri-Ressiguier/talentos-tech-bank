@@ -1,5 +1,7 @@
 package bancoDeMadeira;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
 
 public class Main {
@@ -30,6 +32,7 @@ public class Main {
         int opAninhada;                                             //Operador dos subsistemas
         String id;                                                  //Para consultar as contas através dos IDs
         double valor;                                               //Armazena valor das operações
+        LocalDateTime inicioPrograma;                               //Salva a data do início do sistema bancário
 
 
         Gerente gerente =  new Gerente(123123);                //Cria um gerente ficticio para aprovar Cheque Especial
@@ -38,6 +41,12 @@ public class Main {
 
         /*
         Programa base do programa:
+        - Todas as contas tem opção de transferências sem taxas
+        - A conta poupança rende 5% a cada dois minutos
+        - A conta corrente pode realizar empréstimos de até 2x seu salário. (Juro de 5% por minuto)
+        - As contas que necessitem de Cheque Especial devem consultar o gerente. (Juro fixo de 5%) Obs: Especial Secreto 10%
+
+
         Mostra um menu para o usuário selecionar:
         1 - Cria uma conta no banco
         2 - Acessa a conta através do ID
@@ -46,12 +55,16 @@ public class Main {
             2.3 - Deposito
             2.4 - AdicionarLimiteChequeEspecial (Adiciona 30% do salário do cliente como limite do cheque especial)
             2.5 - Transferência (Pedir id de outro objeto)
+            2.6 - Mostra rendimentos (Conta poupança)
+            2.7 - Solicita Empréstimo (Conta corrente)
+            2.8 - Paga empréstimo (Conta corrente)
             2.0 - Retornar ao menu principal
         3 - Lista todas as contas registradas no banco
         4 - Encerra a conta caso o saldos seja 0
         0 - Sai do programa
          */
         System.out.println("Bem vindo ao Banco de Madeira [MODO FUNCIONÁRIO]");
+        inicioPrograma = LocalDateTime.now();
         Banco banco = new Banco(6); //Nosso banco criado
         while (sistemaLoop) {
             System.out.println("1: Criar Conta / 2: Acessar Conta (ID) / 3: Listar Tudo / 4: Encerrar Conta / 0: Sair");
@@ -112,7 +125,10 @@ public class Main {
                         sistemaLoopInterno = true;
                         System.out.println("Qual operação você deseja fazer? ");
                         while (sistemaLoopInterno) {
-                            System.out.println("1: Mostrar Conta / 2: Listar Extrato / 3: Saque / 4: Deposito / 5: Transferência / 6: AdicionarLimiteChequeEspecial / 0: Retornar ao menu");
+                            System.out.println("1: Mostrar Conta / 2: Listar Extrato / 3: Saque / 4: Deposito" +
+                                    " / 5: Transferência / 6: Mostra Rendimentos (POUPANCA)");
+                            System.out.println("7: Solicitação de empréstimo (CORRENTE) / 8: Pagamento de empréstimo (CORRENTE)" +
+                                    " / 9: AdicionarLimiteChequeEspecial / 0: Retornar ao menu");
                             validaInteiro(in);
                             opAninhada = in.nextInt();
                             switch (opAninhada) {
@@ -155,14 +171,51 @@ public class Main {
                                     valor = in.nextDouble();
                                     contaSelecionada.transferencia(id, valor);
                                     break;
-                                //Adiciona limite do cheque especial
+                                //Mostra os rendimentos - Somente conta poupança
                                 case 6:
+                                    if (contaSelecionada instanceof Poupanca) {
+                                        System.out.println("=== MOSTRA RENDIMENTOS ===");
+                                        ((Poupanca) contaSelecionada).mostraRendimentos();
+                                    } else {
+                                        System.out.println("Esta área é somente para conta poupança");
+                                    }
+                                    break;
+                                //Solicita empréstimo - Somente conta corrente
+                                case 7:
+                                    if (contaSelecionada instanceof Corrente) {
+                                        System.out.println("=== SOLICITA EMPRÉSTIMO ===");
+                                        System.out.println("Qual é o valor do empréstimo? ");
+                                        System.out.println("Seu limite é de " + ((Corrente) contaSelecionada).getLimiteEmprestimo());
+                                        valor = in.nextDouble();
+                                        ((Corrente) contaSelecionada).setEmprestimo(valor);
+                                    } else {
+                                        System.out.println("Esta área é somente para conta corrente");
+                                    }
+                                    break;
+                                //Paga o empréstimo realizado
+                                case 8:
+                                    if (contaSelecionada instanceof Corrente) {
+                                        System.out.println("=== PAGAMENTO DE EMPRÉSTIMO ===");
+                                        ((Corrente) contaSelecionada).pagaEmprestimo();
+                                    } else {
+                                        System.out.println("Esta área é somente para conta corrente");
+                                    }
+                                    break;
+                                //Adiciona limite do cheque especial
+                                case 9:
                                     System.out.println("== ADD LIMITE CHEQUE ESPECIAL ==");
                                     System.out.println("Esta operação necessita de um Gerente. Digite a senha do gerente desta conta: ");
                                     contaSelecionada.adicionarLimiteChequeEspecial(in.nextInt());
                                     break;
                                 default:
                                     System.out.println("Valor informado incorreto!");
+                            }
+                            //O sistema adiciona o rendimento para as contas poupança
+                            Duration duracao = Duration.between(inicioPrograma, LocalDateTime.now());
+                            long diff = duracao.toMinutes();
+                            if (diff >= 2) {
+                                banco.rendePoupanca();
+                                inicioPrograma = LocalDateTime.now();
                             }
                         }
                         break;          //Fecha case2 externo
@@ -186,7 +239,13 @@ public class Main {
                 default:
                     System.out.println("Valor informado incorreto!");
             }
-
+            //O sistema adiciona o rendimento para as contas poupança
+            Duration duracao = Duration.between(inicioPrograma, LocalDateTime.now());
+            long diff = duracao.toMinutes();
+            if (diff >= 2) {
+                banco.rendePoupanca();
+                inicioPrograma = LocalDateTime.now();
+            }
         }
 
     }
