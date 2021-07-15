@@ -84,7 +84,12 @@ public class Main {
                     System.out.println("Qual o nome do cliente? ");
                     String nomeCliente = in.nextLine();
                     System.out.println("Qual a renda mensal do cliente? ");
+                    validaDouble(in);
                     double rendaMensal =  in.nextDouble();
+                    if (rendaMensal < 0) {
+                        System.out.println("A renda não pode ser negativa");
+                        continue;
+                    }
                     //Cria cliente para criar uma conta
                     Cliente cliente = new Cliente(nomeCliente, rendaMensal);
                     System.out.println("Qual a conta o cliente deseja abrir? (C = Corrente / P = Poupança)");
@@ -96,6 +101,10 @@ public class Main {
                             System.out.println("Qual o valor? ");
                             validaDouble(in);
                             valor = in.nextDouble();
+                            if (valor < 0) {
+                                System.out.println("O valor inicial não pode ser negativo");
+                                continue;
+                            }
                             banco.criarContaCorrente(cliente, gerente, valor);
                         } else {
                             banco.criarContaCorrente(cliente, gerente, 0);
@@ -107,6 +116,10 @@ public class Main {
                             System.out.println("Qual o valor? ");
                             validaDouble(in);
                             valor = in.nextDouble();
+                            if (valor < 0) {
+                                System.out.println("O valor inicial não pode ser negativo");
+                                continue;
+                            }
                             banco.criarContaPoupanca(cliente, gerente, valor);
                         } else {
                             banco.criarContaPoupanca(cliente, gerente, 0);
@@ -153,6 +166,10 @@ public class Main {
                                     System.out.println("Qual o valor do saque?");
                                     validaDouble(in);
                                     valor = in.nextDouble();
+                                    if (valor < 0) {
+                                        System.out.println("O valor inicial não pode ser negativo");
+                                        continue;
+                                    }
                                     contaSelecionada.realizarSaque(valor);
                                     break;
                                 //Deposita valores
@@ -161,6 +178,10 @@ public class Main {
                                     System.out.println("Qual o valor do depósito?");
                                     validaDouble(in);
                                     valor = in.nextDouble();
+                                    if (valor < 0) {
+                                        System.out.println("O valor inicial não pode ser negativo");
+                                        continue;
+                                    }
                                     contaSelecionada.depositar(valor);
                                     break;
                                 //Transfere dinheiro para outra conta
@@ -169,7 +190,12 @@ public class Main {
                                     System.out.println("Qual é o ID do favorecido? (4 dígitos)");
                                     id = in.next();
                                     System.out.println("Qual o valor da transferência?");
+                                    validaDouble(in);
                                     valor = in.nextDouble();
+                                    if (valor < 0) {
+                                        System.out.println("O valor inicial não pode ser negativo");
+                                        continue;
+                                    }
                                     contaSelecionada.transferencia(id, valor);
                                     break;
                                 //Mostra os rendimentos - Somente conta poupança
@@ -187,7 +213,12 @@ public class Main {
                                         System.out.println("=== SOLICITA EMPRÉSTIMO ===");
                                         System.out.println("Qual é o valor do empréstimo? ");
                                         System.out.println("Seu limite é de " + ((Corrente) contaSelecionada).getLimiteEmprestimo());
+                                        validaDouble(in);
                                         valor = in.nextDouble();
+                                        if (valor < 0) {
+                                            System.out.println("O valor inicial não pode ser negativo");
+                                            continue;
+                                        }
                                         ((Corrente) contaSelecionada).setEmprestimo(valor);
                                     } else {
                                         System.out.println("Esta área é somente para conta corrente");
